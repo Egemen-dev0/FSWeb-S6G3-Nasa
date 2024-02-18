@@ -1,13 +1,32 @@
 import React from "react";
 import "./App.css";
+import { useState, useEffect } from "react"
+import dataObj  from "./fetchData.js";
+import ApodComponent from "./Apod.js";
 
-function App() {
+const App =  () => {
+  let [apodData, setapodData] = useState([]);
+
+  useEffect(()=> {
+
+const fetchData = async () => {
+try {
+  const response = await dataObj.fetchData()
+  setapodData(response)
+} catch (error) {
+  console.log("Olmadı başkan ", error)
+}
+
+}
+fetchData();
+  }, []);
+  
   return (
     <div className="App">
-      <p>
-        NASA uygulamasını yapmak için README.md dosyasıdaki talimatları takip edin
-		İyi eğlenceler! <span role="img" aria-label='go!'>🚀</span>!
-      </p>
+      {apodData ? apodData.map((current, index) => <ApodComponent key={index} apodData={current} />)
+     : 
+    <p>Loading...</p>
+    }
     </div>
   );
 }
